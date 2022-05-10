@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+
+.search{
+  margin: 10px;
+}
+
+.input-search {
+  padding: 5px;
+}
+
+.button-search{
+  padding: 5px;
+}
+
+input{
+  margin: 5px;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+
+
