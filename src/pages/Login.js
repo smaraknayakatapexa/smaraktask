@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../App.css";
 import { useHistory, withRouter } from "react-router-dom";
+import axios from "../axios";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -13,6 +14,33 @@ function Login() {
 
   const passwordHandler = (e) => {
     setPassword(e.target.value);
+  };
+
+  const loginApi = (e) => {
+    e.preventDefault();
+
+    if (username && password) {
+      const loginRequest = {
+        username: username,
+        password: password,
+      };
+
+      axios
+        .post("/api/login", loginRequest)
+        .then((response) => {
+          if (response.data.status == 200) {
+            localStorage.setItem("token", response.data.token);
+
+            history.push("/mainDashboard");
+            window.location.reload();
+          } else if (response.data.status == 400) {
+            window.alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    }
   };
 
   return (
@@ -39,12 +67,7 @@ function Login() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            if (username == "user" && password == "pass") {
-              history.push("/mainDashboard");
-              window.location.reload();
-            } else {
-              window.alert("Invalid Credentials");
-            }
+            loginApi(e);
           }}
         >
           Login
