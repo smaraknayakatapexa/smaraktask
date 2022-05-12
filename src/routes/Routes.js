@@ -1,7 +1,7 @@
 import React from "react";
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
   Link,
   Redirect,
@@ -14,17 +14,13 @@ import StudentDashboard from "../pages/StudentDashboard";
 export default function () {
   return (
     <Router>
-      <Switch>
-        <Route exact path="/">
-          <Login />
-        </Route>
+      <Routes>
+        <Route exact path="/" element={<Login />}></Route>
 
-        <Route path="/mainDashboard">
-          <MainDashboard />
-        </Route>
+        <Route path="/mainDashboard" element={<MainDashboard />}></Route>
 
-        <Route path="/studentDashboard" component={StudentDashboard}></Route>
-      </Switch>
+        <Route path="/studentDashboard" element={<StudentDashboard />}></Route>
+      </Routes>
     </Router>
   );
 }

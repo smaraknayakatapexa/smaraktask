@@ -42,15 +42,43 @@
 }
 
 .input-search {
-  padding: 5px;
+  padding:10px;
+}
+
+.input-login{
+  padding:10px;
+  font-size: medium;
+  border-radius: 5px;
+}
+
+select{
+  padding:10px;
+  font-size: medium;
+  border-radius: 5px;
+}
+
+.button-login{
+  padding: 10px;
+  margin: 5px;
+  background-color: black;
+  color: #ffffff;
+  font-size: medium;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .button-search{
-  padding: 5px;
+  padding: 10px;
+  background-color: black;
+  color: #ffffff;
+  font-size: small;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 input{
   margin: 5px;
+  padding: 10px;
 }
 
 table {

@@ -24,8 +24,12 @@ function StudentDashboard() {
   }, []);
 
   const getData = () => {
+    const headers = {
+      "auth-token": localStorage.getItem("token"),
+    };
+
     axios
-      .get("/api/student/getStudents")
+      .get("/api/student/get-students", { headers })
       .then((response) => {
         if (response.data.status == 200) {
           setStudentDatas(response.data.data);
@@ -40,6 +44,7 @@ function StudentDashboard() {
 
   function handleChangeData(evt) {
     const value = evt.target.value;
+
     setData({
       ...data,
       [evt.target.name]: value,
@@ -47,13 +52,18 @@ function StudentDashboard() {
   }
 
   const deleteStudent = (id) => {
-    axios.delete("/api/student/deleteStudent/" + id).then((response) => {
-      if (response.data.status == 200) {
-        getData();
-      } else {
-        window.alert(response.data.message);
-      }
-    });
+    const headers = {
+      "auth-token": localStorage.getItem("token"),
+    };
+    axios
+      .delete("/api/student/delete-student/" + id, { headers })
+      .then((response) => {
+        if (response.data.status == 200) {
+          getData();
+        } else {
+          window.alert(response.data.message);
+        }
+      });
   };
 
   const saveData = () => {
@@ -63,8 +73,12 @@ function StudentDashboard() {
         id: id,
       };
 
+      const headers = {
+        "auth-token": localStorage.getItem("token"),
+      };
+
       axios
-        .post("/api/student/updateStudent", obj)
+        .post("/api/student/update-student", obj, { headers })
         .then((response) => {
           if (response.data.status == 200) {
             setAddStudentModal(false);
@@ -87,8 +101,11 @@ function StudentDashboard() {
           console.error("There was an error!", error);
         });
     } else {
+      const headers = {
+        "auth-token": localStorage.getItem("token"),
+      };
       axios
-        .post("/api/student/addNewStudent", data)
+        .post("/api/student/add-new-student", data, { headers })
         .then((response) => {
           if (response.data.status == 200) {
             setAddStudentModal(false);
@@ -112,29 +129,6 @@ function StudentDashboard() {
         });
     }
   };
-
-  const studentData = [
-    {
-      id: 1,
-      studentFirstName: "Smarak",
-      studentMiddleName: "Jeet",
-      studentLastName: "Nayak",
-      studentEmail: "smarak@gmail.com",
-      studentContactNumber: "+919501202963",
-      studentBirthdate: "30-09-1997",
-      studentGender: "Male",
-    },
-    {
-      id: 2,
-      studentFirstName: "Smarak",
-      studentMiddleName: "Jeet",
-      studentLastName: "Nayak2",
-      studentEmail: "smarak2@gmail.com",
-      studentContactNumber: "+919501202964",
-      studentBirthdate: "30-09-1998",
-      studentGender: "Male",
-    },
-  ];
 
   return (
     <div>
@@ -160,13 +154,13 @@ function StudentDashboard() {
         <table>
           <tr>
             <th>ID</th>
-            <th>studentFirstName</th>
-            <th>studentMiddleName</th>
-            <th>studentLastName</th>
-            <th>studentEmail</th>
-            <th>studentContactNumber</th>
-            <th>studentBirthdate</th>
-            <th>studentGender</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+            <th>Birth Date</th>
+            <th>Gender</th>
             <th>Actions</th>
           </tr>
           {studentDatas.map((item, index) => {
@@ -182,6 +176,8 @@ function StudentDashboard() {
                 <td>{item.studentGender}</td>
                 <td>
                   <button
+                    style={{ border: "none" }}
+                    className="button-login"
                     onClick={(e) => {
                       e.preventDefault();
                       setEdit(true);
@@ -203,6 +199,8 @@ function StudentDashboard() {
                     Edit
                   </button>
                   <button
+                    style={{ backgroundColor: "red", border: "none" }}
+                    className="button-login"
                     onClick={(e) => {
                       e.preventDefault();
                       deleteStudent(item._id);
@@ -220,26 +218,9 @@ function StudentDashboard() {
       <Modal
         isOpen={addStudentModal}
         onRequestClose={() => setAddStudentModal(false)}
-        contentLabel="Add new student"
+        style={{ width: "50%" }}
       >
-        <button
-          onClick={() => {
-            setAddStudentModal(false);
-            setData({
-              studentFirstName: "",
-              studentMiddleName: "",
-              studentLastName: "",
-              studentEmail: "",
-              studentContactNumber: "",
-              studentBirthdate: "",
-              studentGender: "",
-            });
-          }}
-        >
-          close
-        </button>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", width: "50%", flexDirection: "column" }}>
           <input
             placeholder="First Name"
             name="studentFirstName"
@@ -291,12 +272,32 @@ function StudentDashboard() {
           </select>
           <button
             style={{ margin: 5 }}
+            className="button-login"
             onClick={(e) => {
               e.preventDefault();
               saveData();
             }}
           >
             Submit
+          </button>
+
+          <button
+            style={{ backgroundColor: "red", border: "none" }}
+            className="button-login"
+            onClick={() => {
+              setAddStudentModal(false);
+              setData({
+                studentFirstName: "",
+                studentMiddleName: "",
+                studentLastName: "",
+                studentEmail: "",
+                studentContactNumber: "",
+                studentBirthdate: "",
+                studentGender: "",
+              });
+            }}
+          >
+            Close
           </button>
         </div>
       </Modal>

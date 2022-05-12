@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "../App.css";
-import { useHistory, withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../axios";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const usernameHandler = (e) => {
     setUsername(e.target.value);
@@ -26,19 +26,19 @@ function Login() {
       };
 
       axios
-        .post("/api/login", loginRequest)
+        .post("/api/user-login", loginRequest)
         .then((response) => {
           if (response.data.status == 200) {
             localStorage.setItem("token", response.data.token);
 
-            history.push("/mainDashboard");
-            window.location.reload();
+            navigate("mainDashboard");
+            // window.location.reload();
           } else if (response.data.status == 400) {
             window.alert(response.data.message);
           }
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          console.error("There was an error!- loginApi", error);
         });
     }
   };
@@ -46,32 +46,43 @@ function Login() {
   return (
     <div className="App">
       <header className="App-header">
-        <p style={{ color: "black" }}>Login to continue</p>
-
-        <input
-          name="username"
-          placeholder="Username"
-          value={username}
-          type="text"
-          onChange={(e) => usernameHandler(e)}
-          style={{ margin: 5 }}
-        />
-        <input
-          name="password"
-          placeholder="Password"
-          value={password}
-          type="password"
-          onChange={(e) => passwordHandler(e)}
-          style={{ margin: 5 }}
-        />
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            loginApi(e);
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "25%",
+            border: "solid grey",
+            borderWidth: "0.25px",
+            padding: 10,
           }}
         >
-          Login
-        </button>
+          <p style={{ color: "black" }}>Login to continue</p>
+
+          <input
+            name="username"
+            placeholder="Username"
+            value={username}
+            type="text"
+            onChange={(e) => usernameHandler(e)}
+            className="input-login"
+          />
+          <input
+            name="password"
+            placeholder="Password"
+            value={password}
+            type="password"
+            onChange={(e) => passwordHandler(e)}
+            className="input-login"
+          />
+          <button
+            onClick={(e) => {
+              loginApi(e);
+            }}
+            className="button-login"
+          >
+            Login
+          </button>
+        </div>
       </header>
     </div>
   );
