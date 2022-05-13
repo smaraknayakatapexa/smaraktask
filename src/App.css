@@ -22,6 +22,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .App-link {
@@ -49,6 +50,7 @@
   padding:10px;
   font-size: medium;
   border-radius: 5px;
+  border-width: 0.25px;
 }
 
 select{

@@ -4,8 +4,8 @@ import Modal from "react-modal";
 import axios from "../axios";
 
 function StudentDashboard() {
-  const [searchText, setSearchText] = useState();
-  const [studentDatas, setStudentDatas] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [studentData, setStudentData] = useState([]);
   const [addStudentModal, setAddStudentModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState();
@@ -32,7 +32,7 @@ function StudentDashboard() {
       .get("/api/student/get-students", { headers })
       .then((response) => {
         if (response.data.status == 200) {
-          setStudentDatas(response.data.data);
+          setStudentData(response.data.data);
         } else if (response.data.status == 400) {
           window.alert(response.data.message);
         }
@@ -137,6 +137,7 @@ function StudentDashboard() {
           placeholder="Search"
           value={searchText}
           className="input-search"
+          onChange={(e) => setSearchText(e.target.value)}
         ></input>
         <button className="button-search">Search</button>
         <button
@@ -163,55 +164,77 @@ function StudentDashboard() {
             <th>Gender</th>
             <th>Actions</th>
           </tr>
-          {studentDatas.map((item, index) => {
-            return (
-              <tr>
-                <td>{index + 1}</td>
-                <td>{item.studentFirstName}</td>
-                <td>{item.studentMiddleName}</td>
-                <td>{item.studentLastName}</td>
-                <td>{item.studentEmail}</td>
-                <td>{item.studentContactNumber}</td>
-                <td>{item.studentBirthdate}</td>
-                <td>{item.studentGender}</td>
-                <td>
-                  <button
-                    style={{ border: "none" }}
-                    className="button-login"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setEdit(true);
+          {studentData
+            .filter((item) => {
+              console.log(item);
+              if (searchText === "") {
+                return item;
+              } else if (
+                item.studentFirstName
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase()) ||
+                item.studentMiddleName
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase()) ||
+                item.studentLastName
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase()) ||
+                item.studentEmail
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase())
+              ) {
+                return item;
+              }
+            })
+            .map((item, index) => {
+              return (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{item.studentFirstName}</td>
+                  <td>{item.studentMiddleName}</td>
+                  <td>{item.studentLastName}</td>
+                  <td>{item.studentEmail}</td>
+                  <td>{item.studentContactNumber}</td>
+                  <td>{item.studentBirthdate}</td>
+                  <td>{item.studentGender}</td>
+                  <td>
+                    <button
+                      style={{ border: "none" }}
+                      className="button-login"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setEdit(true);
 
-                      setId(item._id);
-                      setData({
-                        studentFirstName: item.studentFirstName,
-                        studentMiddleName: item.studentMiddleName,
-                        studentLastName: item.studentLastName,
-                        studentEmail: item.studentEmail,
-                        studentContactNumber: item.studentContactNumber,
-                        studentBirthdate: item.studentBirthdate,
-                        studentGender: item.studentGender,
-                      });
+                        setId(item._id);
+                        setData({
+                          studentFirstName: item.studentFirstName,
+                          studentMiddleName: item.studentMiddleName,
+                          studentLastName: item.studentLastName,
+                          studentEmail: item.studentEmail,
+                          studentContactNumber: item.studentContactNumber,
+                          studentBirthdate: item.studentBirthdate,
+                          studentGender: item.studentGender,
+                        });
 
-                      setAddStudentModal(true);
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    style={{ backgroundColor: "red", border: "none" }}
-                    className="button-login"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      deleteStudent(item._id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+                        setAddStudentModal(true);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      style={{ backgroundColor: "red", border: "none" }}
+                      className="button-login"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteStudent(item._id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
         </table>
       </div>
 
